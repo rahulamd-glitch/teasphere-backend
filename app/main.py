@@ -9,7 +9,10 @@ app = FastAPI(title="TeaSphere AI Engine")
 # ✅ CORS (CRITICAL for frontend on other laptop)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # hackathon safe
+    allow_origins=[
+        "http://localhost:5173",
+        "https://folium-ai.vercel.app"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
