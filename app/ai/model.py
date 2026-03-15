@@ -1,31 +1,26 @@
 import numpy as np
+import keras
 from tensorflow.keras.preprocessing import image
-import tensorflow as tf
 
 from app.utils.hit_engine import hit_rules
 from app.ai.fusion import fuse_decision
 
-
-# =====================================================
-# 1. MODEL LOADING (Finetuned → Fallback)
-# =====================================================
-
+# 1. MODEL LOADING
 try:
     MODEL_PATH = "models/tea_leaf_model_finetuned.keras"
-    model = tf.keras.models.load_model(MODEL_PATH)
+    model = keras.models.load_model(MODEL_PATH)
     print("✅ Loaded FINETUNED model")
 
 except Exception as e:
     print("⚠ Finetuned model not found, loading base model:", e)
-
     MODEL_PATH = "models/tea_leaf_model.keras"
-    model = tf.keras.models.load_model(MODEL_PATH)
+    model = keras.models.load_model(MODEL_PATH)
     print("✅ Loaded BASE model")
 
 
-# =====================================================
+
 # 2. CLASS ORDER (MUST MATCH TRAINING GENERATOR)
-# =====================================================
+
 
 CLASS_ORDER = [
     "blister blight",
@@ -35,9 +30,9 @@ CLASS_ORDER = [
 ]
 
 
-# =====================================================
+
 # 3. SEVERITY LOGIC
-# =====================================================
+
 
 def get_severity(confidence):
     if confidence > 85:
@@ -48,9 +43,9 @@ def get_severity(confidence):
         return "Low"
 
 
-# =====================================================
+
 # 4. TREATMENT GUIDE
-# =====================================================
+
 
 TREATMENT_GUIDE = {
     "blister blight": [
@@ -113,9 +108,9 @@ def predict_quality(img_path):
             "treatment": treatment
         }
 
-        # =================================================
+        
         # 6. HIT + FUSION (SAFE WRAPPER)
-        # =================================================
+       
 
         try:
             hit_result = hit_rules(img_path)
